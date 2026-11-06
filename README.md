@@ -1,8 +1,28 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Prisma MongoDB — User Management
+
+A User Management CRUD demo built with **Next.js 16** (App Router, React 19), **TypeScript**, **Tailwind CSS 4**, and **Prisma 6** connected to a **MongoDB** database.
+
+## What it does
+
+- Lists all users
+- Creates a new user
+- Updates an existing user
+- Deletes a user
+
+Users are stored in MongoDB through Prisma and accessed via REST API routes under `src/app/api/users`. The UI is a single client component in `src/component/User.tsx`.
+
+### Project structure
+
+- `prisma/schema.prisma` — `User` model (`id`, `name`, `email`, `phone`, `age`, `createdAt`)
+- `src/lib/prisma.ts` — singleton `PrismaClient`
+- `src/app/api/users/route.ts` — `GET` list, `POST` create
+- `src/app/api/users/[id]/route.ts` — `PATCH` update, `DELETE`
+- `src/component/User.tsx` — form + user list
+- `ai/note.md` — detailed project notes
 
 ## Getting Started
 
-First, run the development server:
+Set `DATABASE_URL` (MongoDB connection string) in `.env`, then run the development server:
 
 ```bash
 npm run dev
