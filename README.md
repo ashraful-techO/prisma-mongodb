@@ -18,7 +18,7 @@ Users are stored in MongoDB through Prisma and accessed via REST API routes unde
 - `src/app/api/users/route.ts` — `GET` list, `POST` create
 - `src/app/api/users/[id]/route.ts` — `PATCH` update, `DELETE`
 - `src/component/User.tsx` — form + user list
-- `ai/note.md` — detailed project notes
+- `ai/project-brief.md` — project brief: what we want to create and the task it solves
 
 ## Getting Started
 
