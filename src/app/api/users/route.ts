@@ -1,19 +1,40 @@
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
+import {
+  buildPagination,
+  buildUserOrderBy,
+  buildUserWhere,
+  parseUserQuery,
+} from "@/lib/user-query";
 
-// GET ALL USERS
-export async function GET() {
+// GET USERS
+export async function GET(req: Request) {
   try {
-    const users = await prisma.user.findMany({
-      orderBy: {
-        createdAt: "desc",
-      },
-    });
+    const { searchParams } = new URL(req.url);
+    const query = parseUserQuery(searchParams);
+    const where = buildUserWhere(query);
+    const orderBy = buildUserOrderBy(query);
 
-    return NextResponse.json(users);
-  } catch {
+    const [users, totalRecords] = await Promise.all([
+      prisma.user.findMany({
+        where,
+        orderBy,
+        skip: (query.page - 1) * query.limit,
+        take: query.limit,
+      }),
+      prisma.user.count({ where }),
+    ]);
+
+    return NextResponse.json({
+      users,
+      pagination: buildPagination(query.page, query.limit, totalRecords),
+    });
+  } catch (error) {
     return NextResponse.json(
-      { message: "Failed to fetch users" },
+      {
+        message:
+          error instanceof Error ? error.message : "Failed to fetch users",
+      },
       { status: 500 },
     );
   }
